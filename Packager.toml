@@ -1,0 +1,11 @@
+#:schema https://raw.githubusercontent.com/crabnebula-dev/cargo-packager/refs/heads/main/crates/packager/schema.json
+# I have to use camelCase :(
+
+productName = "BlipClip"
+identifier = "com.blipclip.app"
+beforePackagingCommand = "cargo build --release"
+
+[[fileAssociations]]
+extensions = ["blipc"]
+name = "BlipClip File"
+description = "BlipClip clipboard transfer file"
