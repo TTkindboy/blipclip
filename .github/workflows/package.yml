@@ -19,6 +19,4 @@ jobs:
       - uses: actions/upload-artifact@v7
         with:
           name: blipclip-macos
-          path: |
-            target/release/*.app
-            target/release/*.dmg
+          path: target/release/*.dmg
