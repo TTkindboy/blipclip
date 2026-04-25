@@ -8,4 +8,16 @@ arboard = "3.6.1"
 log = "0.4.29"
 simplelog = "0.12.2"
 
-# packager info in Packager.toml
+[package.metadata.packager]
+product-name = "BlipClip"
+identifier = "com.blipclip.app"
+before-packaging-command = "cargo build --release"
+
+[[package.metadata.packager.binaries]]
+path = "blipclip"
+main = true
+
+[[package.metadata.packager.file-associations]]
+extensions = ["blipc"]
+name = "BlipClip File"
+description = "BlipClip clipboard transfer file"
