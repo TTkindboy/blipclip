@@ -4,8 +4,15 @@ on:
     branches: [main]
 
 jobs:
-  package-macos:
-    runs-on: macos-latest
+  package:
+    strategy:
+      matrix:
+        include:
+          - os: macos-latest
+            artifact: "*.dmg"
+          - os: windows-latest
+            artifact: "*.exe"
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v6
       - uses: dtolnay/rust-toolchain@stable
@@ -15,8 +22,8 @@ jobs:
       - run: cargo binstall cargo-packager --no-confirm --locked
 
       - run: cargo packager --release
-      
+
       - uses: actions/upload-artifact@v7
         with:
-          name: blipclip-macos
-          path: target/release/*.dmg
+          name: blipclip-${{ matrix.os }}
+          path: target/release/${{ matrix.artifact }}
