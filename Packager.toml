@@ -1,9 +1,10 @@
-#:schema https://raw.githubusercontent.com/crabnebula-dev/cargo-packager/refs/heads/main/crates/packager/schema.json
-# I have to use camelCase :(
-
 productName = "BlipClip"
 identifier = "com.blipclip.app"
 beforePackagingCommand = "cargo build --release"
+
+[[binaries]]
+path = "blipclip"
+main = true
 
 [[fileAssociations]]
 extensions = ["blipc"]

@@ -10,10 +10,11 @@ jobs:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
       - uses: cargo-bins/cargo-binstall@main
+      - uses: Swatinem/rust-cache@v2
 
       - run: cargo binstall cargo-packager --no-confirm --locked
 
-      - run: cargo packager --release --config ./Packager.toml
+      - run: cargo packager --release
       
       - uses: actions/upload-artifact@v4
         with:
