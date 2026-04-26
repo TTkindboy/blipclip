@@ -9,7 +9,7 @@ jobs:
       matrix:
         include:
           - os: macos-latest
-            artifact: "*.dmg"
+            artifact: "*.app"
           - os: windows-latest
             artifact: "*.exe"
     runs-on: ${{ matrix.os }}
