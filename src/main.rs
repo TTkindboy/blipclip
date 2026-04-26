@@ -14,7 +14,7 @@ fn main() -> anyhow::Result<()> {
     let mut clipboard = Clipboard::new()?;
 
     log::info!("app started");
-    log::info!("clipboard text: {}", clipboard.get_text().unwrap())
+    log::info!("clipboard text: {}", clipboard.get_text().unwrap());
     Notification::new()
     .summary("Blipclip")
     .body("Clipboard text copied to log file!")
