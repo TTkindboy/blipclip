@@ -1,7 +1,8 @@
-use anyhow::{Context, Ok};
+use anyhow::{Context, Ok, bail};
 use arboard::Clipboard;
+use notify_rust::Notification;
 use simplelog::*;
-use std::{fs, fs::File};
+use std::{ffi::OsStr, fs, fs::File, path::Path};
 
 fn main() -> anyhow::Result<()> {
     init_logger()?;
@@ -29,10 +30,15 @@ fn run() -> anyhow::Result<()> {
     let file_path = std::env::args_os()
         .nth(1)
         .context("no blipc file provided")?;
-    log::info!("opening {}", file_path.to_string_lossy());
+    let file_path = Path::new(&file_path);
+    log::info!("opening {}", file_path.display());
 
-    let contents = fs::read_to_string(&file_path)
-        .with_context(|| format!("failed to read {}", file_path.to_string_lossy()))?;
+    if file_path.extension() != Some(OsStr::new("blipc")) {
+        bail!("refusing to open non-blipc file: {}", file_path.display());
+    }
+
+    let contents = fs::read_to_string(file_path)
+        .with_context(|| format!("failed to read {}", file_path.display()))?;
     log::info!("read {} bytes", contents.len());
 
     Clipboard::new()?
@@ -40,9 +46,17 @@ fn run() -> anyhow::Result<()> {
         .context("failed to copy file contents to clipboard")?;
     log::info!("copied file contents to clipboard");
 
-    fs::remove_file(&file_path)
-        .with_context(|| format!("failed to delete {}", file_path.to_string_lossy()))?;
-    log::info!("deleted {}", file_path.to_string_lossy());
+    fs::remove_file(file_path)
+        .with_context(|| format!("failed to delete {}", file_path.display()))?;
+    log::info!("deleted {}", file_path.display());
+
+    notify("BlipClip", "Copied to clipboard");
 
     Ok(())
+}
+
+fn notify(summary: &str, body: &str) {
+    if let Err(error) = Notification::new().summary(summary).body(body).show() {
+        log::warn!("failed to show notification: {error:#}");
+    }
 }
